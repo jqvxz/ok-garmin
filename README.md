@@ -6,7 +6,7 @@ Simple program that allows the user to control the system with some voice comman
 
 ## Installation 
 
-- [Download](https://github.com/jqvxz/ok-garmin/releases/download/1.1/direct-install.cmd)
+[Download fast install script](https://github.com/jqvxz/ok-garmin/releases/download/1.1/direct-install.cmd)
 
 
 ## Authors
