@@ -6,10 +6,8 @@ echo [i] Please wait while we are installing the required programs to make the v
 echo.
 
 echo [*] Checking for Python installation...
-for /f "tokens=*" %%i in ('winget list ^| findstr /i "Python"') do (
-    set "python_status=%%i"
-)
-if not defined python_status (
+python --version >nul 2>&1
+if %errorlevel% neq 0 (
     echo [!] Python is not installed
     echo [*] Starting installation via winget...
     winget install --id Python.Python.3 -e
@@ -38,6 +36,7 @@ set "packages[1]=Pillow"
 set "packages[2]=fuzzywuzzy"
 set "packages[3]=python-Levenshtein"
 set "packages[4]=colorama"
+set "all_success=pyautogui"
 set "all_success=true"
 for /L %%i in (0,1,4) do (
     call :install_package "%%packages[%%i]%%"
@@ -54,7 +53,6 @@ if "%all_success%"=="true" (
 )
 
 echo [*] Installing the program on your pc...
-cd C:\Users\%username%\Desktop
 mkdir ok-garmin
 cd ok-garmin
 curl -s https://raw.githubusercontent.com/jqvxz/ok-garmin/refs/heads/main/listener.py > listener.py
