@@ -37,6 +37,7 @@ set "packages[2]=fuzzywuzzy"
 set "packages[3]=python-Levenshtein"
 set "packages[4]=colorama"
 set "all_success=pyautogui"
+set "all_success=pyaudio"
 set "all_success=true"
 for /L %%i in (0,1,4) do (
     call :install_package "%%packages[%%i]%%"
