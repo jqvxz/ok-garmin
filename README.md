@@ -20,9 +20,9 @@ Simple program that allows the user to control the system with some voice comman
 - Open some websites with voice commands
 - Funny beep
 
-## OK GARMIN 🎶🎶 RUBBEL IHN LANGSAM
+## OK GARMIN 🎵 RUBBEL IHN LANGSAM 🎶🎶
 
-<img width="1729" height="800" alt="image" src="https://github.com/user-attachments/assets/5ae6ab27-02c1-4be4-9a26-b9a12d6f8cee" />
+<img width="1729" height="500" alt="image" src="https://github.com/user-attachments/assets/5ae6ab27-02c1-4be4-9a26-b9a12d6f8cee" />
 
 
 ## Links
