@@ -244,6 +244,12 @@ def start_listening():
     print(f"{PREFIX_INFO} Calibrating for ambient noise...")
     with microphone as source:
         recognizer.adjust_for_ambient_noise(source, duration=1.5)
+    
+    # --- ADDED ---
+    # Play a success beep to indicate that calibration is complete and the assistant is ready.
+    play_success_beep()
+    # --- END ADDED ---
+
     print(f"{PREFIX_INFO} Ready. Listening for hotwords (Threshold: {FUZZY_MATCH_THRESHOLD}%)")
     
     while True:
