@@ -4,7 +4,9 @@
 Simple program that allows the user to control the system with some voice commands that require the trigger word "ok garmin" as in the meme that was created on tiktok 
 
 
+## Installation 
 
+- [Download](https://github.com/jqvxz/ok-garmin/releases/download/1.1/direct-install.cmd)
 
 
 ## Authors
