@@ -1,0 +1,4 @@
+SpeechRecognition
+pillow
+fuzzywuzzy
+colorama
