@@ -10,7 +10,7 @@ python --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo [!] Python is not installed
     echo [*] Starting installation via winget...
-    winget install --id Python.Python.3 -e
+    winget install -e --id Python.Python.3.11
 ) else (
     echo [+] Python is installed
 )
