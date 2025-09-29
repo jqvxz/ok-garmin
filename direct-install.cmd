@@ -1,7 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Color codes
 for /F "tokens=1" %%e in ('echo prompt $E ^| cmd') do set "ESC=%%e"
 set "RED=!ESC![31m"
 set "GREEN=!ESC![32m"
@@ -12,8 +11,7 @@ set "CYAN=!ESC![36m"
 set "WHITE=!ESC![37m"
 set "RESET=!ESC![0m"
 
-:: Title and welcome message
-title ok-garmin - simple setup
+title ok-garmin - simple setup v2
 echo.
 echo    _____ _                 _       _____      _               
 echo   / ____(_)               ^| ^|     / ____^|    ^| ^|              
@@ -22,21 +20,33 @@ echo   \___ \^| ^| '_ ` _ \^| '_ \^| ^|/ _ \\___ \ / _ \ __^| ^| ^| ^| '_ \
 echo   ____) ^| ^| ^| ^| ^| ^| ^| ^|_) ^| ^|  __/____) ^|  __/ ^|_^| ^|_^| ^| ^|_) ^|
 echo  ^|_____/^|_^|_^| ^|_^| ^|_^| .__/^|_^|\___^|_____/ \___^|\__^|\__,_^| .__/   for Python voice assistant
 echo                     ^| ^|                                ^| ^|    
-echo                     ^|_^|                                ^|_^|    
+echo                     ^|_^|                                ^|_^|  
 echo.
 echo %WHITE%[i] Please wait while we are installing the required programs to make the voice assistant work%RESET%
+
+for /f "tokens=4-5 delims=. " %%i in ('ver') do set "winver=%%i"
+if "%winver%"=="10" (
+    echo %CYAN%[i] Detected Windows 10 - using WMIC for microphone checks%RESET%
+) else (
+    echo %CYAN%[i] Detected Windows 11 - using PowerShell for microphone checks%RESET%
+)
 echo.
 
-:: Check for python installation
 echo %WHITE%[*] Checking for Python installation...%RESET%
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo %YELLOW%[^^!] Python is not installed%RESET%
+    where winget >nul 2>&1
+    if %errorlevel% neq 0 (
+        echo %RED%[^^!] Winget is not available on this system. Please install Python manually from https://www.python.org/downloads/%RESET%
+        timeout -t 2 >nul
+        exit /b 1
+    )
     echo %WHITE%[*] Starting installation via winget...%RESET%
     winget install -e --id Python.Python.3.11
     if %errorlevel% neq 0 (
         echo %RED%[^^!] Failed to install Python. Please install it manually from https://www.python.org/downloads/ %RESET%
-        timeout -t 2 > NUL
+        timeout -t 2 >nul
         exit /b 1
     ) else (
         echo %GREEN%[+] Python installed successfully%RESET%
@@ -45,27 +55,29 @@ if %errorlevel% neq 0 (
     echo %GREEN%[+] Python is installed%RESET%
 )
 
-:: Checking for microphones
 echo.
 echo %WHITE%[*] Checking for Microphones...%RESET%
-for /f "tokens=*" %%a in ('wmic path Win32_SoundDevice get Name /format:list ^| findstr /i "microphone mic"') do (
-    set "mic_found=true"
+if "%winver%"=="10" (
+    for /f "tokens=*" %%a in ('wmic path Win32_SoundDevice get Name /format:list ^| findstr /i "microphone mic"') do (
+        set "mic_found=true"
+    )
+) else (
+    for /f "tokens=*" %%a in ('powershell -command "Get-PnpDevice -Class AudioEndpoint ^| findstr Microphone"') do (
+        set "mic_found=true"
+    )
 )
 
 if "%mic_found%"=="true" (
     echo %GREEN%[+] Microphones were found%RESET%
-
 ) else (
     echo %RED%[^^!] No microphones found%RESET%
     set /p no-mic="%RED%[^^!] Continue anyway (y/N): %RESET%"
+    if /i not "%no-mic%"=="y" (
+        echo %RED%[^^!] Exiting installation due to no microphones found%RESET%
+        exit /b 1
+    )
 )
 
-if /i "%no-mic%" == "y" (
-    echo %RED%[^^!] Exiting installation due to no microphones found%RESET%
-    exit /b 1
-)
-
-:: Installing requirements
 echo.
 echo %WHITE%[*] Installing requirements for python program...%RESET%
 set "packages[0]=SpeechRecognition"
@@ -91,7 +103,6 @@ if "%all_success%"=="true" (
     echo %RED%[^^!] Some installations failed. Please check the log above for details.%RESET%
 )
 
-:: Download voice assistant files
 echo %WHITE%[*] Installing the program on your pc...%RESET%
 if not exist "ok-garmin" mkdir ok-garmin
 cd ok-garmin
